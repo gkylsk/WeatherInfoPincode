@@ -30,6 +30,9 @@ public class WeatherService {
 	@Autowired
 	private WeatherInfoRepository weatherInfoRepository;
 	
+	@Autowired
+	RestTemplate restTemplate;
+	
 	@Value("${api.key}")
 	private String apiKey;
 	
@@ -93,7 +96,7 @@ public class WeatherService {
 		//since format is {zip code},{country code} for zip code and input is integer assuming country as india
 		String url = "http://api.openweathermap.org/geo/1.0/zip?zip="+pincode+",in&appid="+apiKey;
 		
-		RestTemplate restTemplate = new RestTemplate();
+		
 		ResponseEntity<PincodeResponse> res = restTemplate.getForEntity(url, PincodeResponse.class);
 		if(res.getStatusCode().isError()) {
 			throw new RuntimeException(res.getStatusCode().toString());
@@ -107,7 +110,7 @@ public class WeatherService {
 	public WeatherInfoResponse getWeather(double latitude, double longitude, LocalDate date) {
 		long timestamp = date.atStartOfDay(ZoneOffset.UTC).toEpochSecond();
 		String url = "https://api.openweathermap.org/data/2.5/weather?lat="+ latitude+ "&lon=" + longitude + "&appid="+ apiKey + "&dt="+ timestamp;
-		RestTemplate restTemplate = new RestTemplate();
+		
 		ResponseEntity<WeatherInfoResponse> res = restTemplate.getForEntity(url, WeatherInfoResponse.class);
 		if(res.getStatusCode().isError()) {
 			throw new RuntimeException(res.getStatusCode().toString());
