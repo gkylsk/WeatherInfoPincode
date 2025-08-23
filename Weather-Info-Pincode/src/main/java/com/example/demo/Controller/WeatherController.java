@@ -14,8 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.Entity.WeatherInfo;
 import com.example.demo.Service.WeatherService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 @RestController
 @RequestMapping("api/weather")
+@Tag(name = "Weather Info API", description = "Endpoint for fetching weather information")
 public class WeatherController {
 
 	@Autowired
@@ -24,9 +30,12 @@ public class WeatherController {
 	WeatherInfo info = null;
 	
 	@GetMapping
-	public ResponseEntity<WeatherInfo> getWeatherInfo(@RequestParam Integer pincode, @RequestParam @DateTimeFormat(pattern = "yyyy-mm-dd") LocalDate date){
+	@Operation(summary = "Get Weather info from pincode and date")
+	public ResponseEntity<WeatherInfo> getWeatherInfo(
+			@Parameter(description = "Pincode of location", example = "411014") @RequestParam Integer pincode, 
+			@Parameter(description = "Date in yyyy-mm-dd format", example = "2020-10-15") @RequestParam @DateTimeFormat(pattern = "yyyy-mm-dd") LocalDate for_date){
 		try {
-			info = weatherService.getWeatherInfo(pincode, date);
+			info = weatherService.getWeatherInfo(pincode, for_date);
 		}
 		catch (Exception e) {
 			// TODO: handle exception
