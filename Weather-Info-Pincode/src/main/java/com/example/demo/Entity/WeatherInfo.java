@@ -29,5 +29,8 @@ public class WeatherInfo {
 	private int humidity;
 	private int pressure;
 	private double wind;
+	private String place;
+	private String country;
+	private String description;
 	
 }
